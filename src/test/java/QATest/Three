@@ -1,0 +1,19 @@
+ What are the advantages of TestNG & TestNG annotations?
+
+Advantages of TestNG
+
+1- Batch Execution
+2- Group Execution
+3- Parallel Execution
+4- Parameterization
+5- HTML Report
+6- Assertion
+7- Prioritization
+
+Advantages of TestNG annotations
+
+1- TestNG identifies the methods it is interested in, by looking up annotations.
+Hence, method names are not restricted to any pattern or format.
+2- We can pass additional parameters to annotations.
+3- Annotations are strongly typed, so the compiler will flag any mistakes right away.
+4- Test classes no longer need to extend anything (such as TestCase, for JUnit 3).
