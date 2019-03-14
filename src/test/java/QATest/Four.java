@@ -1,10 +1,5 @@
 package QATest;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.testng.annotations.*;
-
 public class Four {
     public static void main(String[] args) {
 
