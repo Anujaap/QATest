@@ -3,7 +3,7 @@
 
     <test name="order">
         <classes>
-            <class name="QATest.Four" />
+            <class name="QATest.Mercury_Tours" />
         </classes>
     </test>
 

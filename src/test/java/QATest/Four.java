@@ -1,14 +1,10 @@
 package QATest;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import org.testng.annotations.*;
 
 public class Four {
-    public static void main(String[] args) {
 
-    }
 
         @Test
         public void testCase1() {
@@ -25,10 +21,7 @@ public class Four {
             System.out.println("Executing beforeMethod");
         }
 
-        @AfterMethod
-        public void afterMethod() {
-            System.out.println("Executing afterMethod");
-        }
+
 
         @BeforeClass
         public static void beforeClass() {
@@ -57,6 +50,12 @@ public class Four {
 
         @AfterSuite
         public void afterSuite() {
+
             System.out.println("Executing afterSuite");
         }
+        @AfterMethod
+    public void afterMethod() {
+        System.out.println("Executing afterMethod");
+    }
+
 }
