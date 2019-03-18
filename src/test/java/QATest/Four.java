@@ -1,8 +1,11 @@
 package QATest;
 
+<<<<<<< HEAD
 
 import org.testng.annotations.*;
 
+=======
+>>>>>>> 4c8e945482666d7f0f03c90f04dae4761f39c084
 public class Four {
 
 
