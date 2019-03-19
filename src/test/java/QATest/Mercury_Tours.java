@@ -7,15 +7,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 
 public class Mercury_Tours {
 
@@ -28,7 +25,7 @@ public class Mercury_Tours {
     }
 
 
-    @BeforeClass
+    @Test(description = "new user register")
     public void register() {
         driver.findElement(By.xpath("//a[text()='REGISTER']")).click();
         driver.findElement(By.xpath("//input[@name='firstName']")).sendKeys("Anuja");
@@ -50,7 +47,7 @@ public class Mercury_Tours {
         driver.findElement(By.name("register")).click();
 
     }
-    @BeforeMethod
+    @Test(description = "Login with valid credentials", dependsOnMethods = "register", priority = 1)
     public void login(){
         driver.get("http://newtours.demoaut.com/");
         driver.findElement(By.xpath("//input[@name='userName']")).sendKeys("anuja.pandey@tothenew.com");
@@ -59,19 +56,22 @@ public class Mercury_Tours {
     }
 
 
-    @Test
+    @Test(description = "end-to-end Flight Booking with valid credentials", dependsOnMethods = {"register","login"}, priority = 2)
     public void flightBooking() {
 
         driver.findElements(By.xpath("//input[@name='tripType']")).get(0).click();
 
+        //Passengers
         WebElement numPass = driver.findElement(By.xpath("//select[@name='passCount']"));
         Select numPassOption = new Select(numPass);
         numPassOption.selectByValue("2");
 
+        //Departing
         WebElement departFrom = driver.findElement(By.xpath("//select[@name='fromPort']"));
         Select departFromOption = new Select(departFrom);
         departFromOption.selectByValue("New York");
 
+        //departing(date)
         WebElement departMonth = driver.findElement(By.xpath("//select[@name='fromMonth']"));
         Select departMonthOption = new Select(departMonth);
         departMonthOption.selectByValue("2");
@@ -80,10 +80,12 @@ public class Mercury_Tours {
         Select departDayOption = new Select(departDay);
         departDayOption.selectByValue("22");
 
+        // ARRIVING IN
         WebElement arrivTo = driver.findElement(By.xpath("//select[@name='toPort']"));
         Select arrivToOption= new Select(arrivTo);
         arrivToOption.selectByValue("London");
 
+        //Returning date
         WebElement arrivMonth = driver.findElement(By.xpath("//select[@name='toMonth']"));
         Select arrivMonthOption = new Select(arrivMonth);
         arrivMonthOption.selectByValue("2");
@@ -92,16 +94,27 @@ public class Mercury_Tours {
         Select arrivDayOption = new Select(arrivDay);
         arrivDayOption.selectByValue("25");
 
+        //Service class
         driver.findElements(By.xpath("//input[@type='radio']")).get(1).click();
 
+        //Airline
         WebElement flightType = driver.findElement(By.xpath("//select[@name='airline']"));
         Select flightTypeOption = new Select(flightType);
         flightTypeOption.selectByVisibleText("No Preference");
 
+        //continue button
         driver.findElement(By.xpath("//input[@name='findFlights']")).click();
+
+        //Depart to
         driver.findElement(By.xpath("//input[@value='Blue Skies Airlines$361$271$7:10']")).click();
+
+        //Arrive to
         driver.findElement(By.xpath("//input[@value='Blue Skies Airlines$630$270$12:23']")).click();
+
+        //continue button clicked
         driver.findElement(By.xpath("//input[@name='reserveFlights']")).click();
+
+        //payment details
         driver.findElement(By.xpath("//input[@name='passFirst0']")).sendKeys("anuja");
         driver.findElement(By.xpath("//input[@name='passLast0']")).sendKeys("pandey");
 
@@ -133,81 +146,85 @@ public class Mercury_Tours {
         driver.findElement(By.xpath("//input[@name='cc_last_name']")).sendKeys("Pandey");
 
         driver.findElement(By.xpath("//input[@name='buyFlights']")).click();
-
     }
 
-
     //******Departure and arrival city not same
-    @Test(description = "departure and arival city negative test case")
-    public void city() throws InterruptedException {
+    @Test(description = "departure and arival city negative test case", dependsOnMethods = {"register","login"}, priority = 3)
+    public void city() {
+
+        driver.get("http://newtours.demoaut.com/mercuryreservation.php?osCsid=8af1e1a6f13b5cf11b3a39847c952e8e");
         driver.findElements(By.name("tripType")).get(0).click();
         //Passengers
-        WebElement passengers = driver.findElement(By.name("passCount"));
-        Select selectpassenger = new Select(passengers);
-        selectpassenger.selectByVisibleText("1");
+        WebElement numPass = driver.findElement(By.xpath("//select[@name='passCount']"));
+        Select numPassOption = new Select(numPass);
+        numPassOption.selectByValue("2");
 
         //Departing
-
-        WebElement depart = driver.findElement(By.name("fromPort"));
-        Select departdrop = new Select(depart);
-
-        departdrop.selectByVisibleText("Acapulco");
+        WebElement departFrom = driver.findElement(By.xpath("//select[@name='fromPort']"));
+        Select departFromOption = new Select(departFrom);
+        departFromOption.selectByValue("New York");
 
         //departing(date)
-        WebElement month = driver.findElement(By.name("fromMonth"));
-        WebElement day = driver.findElement(By.name("fromDay"));
-        new Select(month).selectByVisibleText("May");
-        new Select(day).selectByVisibleText("2");
+        WebElement departMonth = driver.findElement(By.xpath("//select[@name='fromMonth']"));
+        Select departMonthOption = new Select(departMonth);
+        departMonthOption.selectByValue("2");
+
+        WebElement departDay = driver.findElement(By.xpath("//select[@name='fromDay']"));
+        Select departDayOption = new Select(departDay);
+        departDayOption.selectByValue("22");
 
 
         // ARRIVING IN
-        WebElement arrive = driver.findElement(By.name("toPort"));
-        new Select(arrive).selectByVisibleText("Acapulco");
+        WebElement arrivTo = driver.findElement(By.xpath("//select[@name='toPort']"));
+        Select arrivToOption= new Select(arrivTo);
+        arrivToOption.selectByValue("New York");
 
         //Returning date
-        WebElement month1 = driver.findElement(By.name("toMonth"));
-        WebElement day1 = driver.findElement(By.name("toDay"));
-        new Select(month1).selectByVisibleText("May");
-        new Select(day1).selectByVisibleText("10");
+        WebElement arrivMonth = driver.findElement(By.xpath("//select[@name='toMonth']"));
+        Select arrivMonthOption = new Select(arrivMonth);
+        arrivMonthOption.selectByValue("2");
+
+        WebElement arrivDay = driver.findElement(By.xpath("//select[@name='toDay']"));
+        Select arrivDayOption = new Select(arrivDay);
+        arrivDayOption.selectByValue("25");
 
         //Service class
-        driver.findElements(By.xpath("//input[@name='servClass']")).get(2).click();
+        driver.findElements(By.xpath("//input[@type='radio']")).get(1).click();
 
         //Airline
-        WebElement prefrence = driver.findElement(By.name("airline"));
-        new Select(prefrence).selectByVisibleText("Unified Airlines");
+        WebElement flightType = driver.findElement(By.xpath("//select[@name='airline']"));
+        Select flightTypeOption = new Select(flightType);
+        flightTypeOption.selectByVisibleText("No Preference");
 
 
         //continue button
-        driver.findElement(By.name("findFlights")).submit();
+        driver.findElement(By.xpath("//input[@name='findFlights']")).click();
 
         //Depart to
-        driver.findElements(By.name("outFlight")).get(2).click();
+        driver.findElement(By.xpath("//input[@value='Blue Skies Airlines$361$271$7:10']")).click();
+
         //Arrive to
-        driver.findElements(By.name("outFlight")).get(2).click();
+        driver.findElement(By.xpath("//input[@value='Blue Skies Airlines$630$270$12:23']")).click();
 
         //continue button clicked
-        driver.findElement(By.name("reserveFlights")).submit();
-
+        driver.findElement(By.xpath("//input[@name='reserveFlights']")).click();
 
         try {
             // Making the test fail
-            Assert.assertEquals(depart.getAttribute("value"), arrive.getAttribute("value"));
-
+            Assert.assertEquals(departFrom.getAttribute("value"), arrivTo.getAttribute("value"));
         } catch (StaleElementReferenceException e) {
 
-            depart = driver.findElement(By.name("fromPort"));
-            arrive = driver.findElement(By.name("toPort"));
-            System.out.println(depart.getAttribute("value"));
-            System.out.println(arrive.getAttribute("value"));
-            Assert.assertNotEquals(depart.getAttribute("value"), arrive.getAttribute("value"));
-
+            departFrom = driver.findElement(By.name("fromPort"));
+            arrivTo = driver.findElement(By.name("toPort"));
+            System.out.println(departFrom.getAttribute("value"));
+            System.out.println(arrivTo.getAttribute("value"));
+            Assert.assertNotEquals(departFrom.getAttribute("value"), arrivTo.getAttribute("value"));
 
             // Following lines will be printed when the assert condition fails
             System.out.println("test case");
             System.out.println("Error message: " + e.toString());
 
-            Thread.sleep(300);
+            driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
             System.out.println("city end ");
         }
     }
@@ -216,57 +233,68 @@ public class Mercury_Tours {
 //*******Arrival and Departure date
 
 
-    @Test(description = "Departure date should be less than arrival date " )
-    public void date() throws InterruptedException {
+    @Test(description = "Departure date should be less than arrival date ", dependsOnMethods = {"register","login"}, priority = 4)
+    public void date(){
+
+        driver.get("http://newtours.demoaut.com/mercuryreservation.php?osCsid=8af1e1a6f13b5cf11b3a39847c952e8e");
         driver.findElements(By.xpath("//input[@name='tripType']")).get(0).click();
+
         //Passengers
-        WebElement passengers = driver.findElement(By.name("passCount"));
-        Select selectpassenger = new Select(passengers);
-        selectpassenger.selectByVisibleText("1");
+        WebElement numPass = driver.findElement(By.xpath("//select[@name='passCount']"));
+        Select numPassOption = new Select(numPass);
+        numPassOption.selectByValue("2");
 
         //Departing
-
-        WebElement depart = driver.findElement(By.name("fromPort"));
-        Select departdrop = new Select(depart);
-
-        departdrop.selectByVisibleText("Acapulco");
+        WebElement departFrom = driver.findElement(By.xpath("//select[@name='fromPort']"));
+        Select departFromOption = new Select(departFrom);
+        departFromOption.selectByValue("New York");
 
         //departing(date)
-        WebElement month = driver.findElement(By.name("fromMonth"));
-        WebElement day = driver.findElement(By.name("fromDay"));
-        new Select(month).selectByVisibleText("May");
-        new Select(day).selectByVisibleText("2");
+        WebElement departMonth = driver.findElement(By.xpath("//select[@name='fromMonth']"));
+        Select departMonthOption = new Select(departMonth);
+        departMonthOption.selectByValue("2");
 
-        String month_depart = month.getAttribute("value");
-        String day_depart = day.getAttribute("value");
+        WebElement departDay = driver.findElement(By.xpath("//select[@name='fromDay']"));
+        Select departDayOption = new Select(departDay);
+        departDayOption.selectByValue("22");
+
+        String month_depart = departMonth.getAttribute("value");
+        String day_depart = departDay.getAttribute("value");
 
         // ARRIVING IN
-        WebElement arrive = driver.findElement(By.name("toPort"));
-        new Select(arrive).selectByVisibleText("London");
+        WebElement arrivTo = driver.findElement(By.xpath("//select[@name='toPort']"));
+        Select arrivToOption= new Select(arrivTo);
+        arrivToOption.selectByValue("London");
 
         //Returning date
-        WebElement month1 = driver.findElement(By.name("toMonth"));
-        WebElement day1 = driver.findElement(By.name("toDay"));
-        new Select(month1).selectByVisibleText("May");
-        new Select(day1).selectByVisibleText("2");
+        WebElement arrivMonth = driver.findElement(By.xpath("//select[@name='toMonth']"));
+        Select arrivMonthOption = new Select(arrivMonth);
+        arrivMonthOption.selectByValue("2");
 
-        driver.findElements(By.xpath("//input[@name='servClass']")).get(2).click();
+        WebElement arrivDay = driver.findElement(By.xpath("//select[@name='toDay']"));
+        Select arrivDayOption = new Select(arrivDay);
+        arrivDayOption.selectByValue("22");
+
+        //SerClass
+        driver.findElements(By.xpath("//input[@type='radio']")).get(1).click();
 
         //Airline
-        WebElement prefrence = driver.findElement(By.name("airline"));
-        new Select(prefrence).selectByVisibleText("Unified Airlines");
+        WebElement flightType = driver.findElement(By.xpath("//select[@name='airline']"));
+        Select flightTypeOption = new Select(flightType);
+        flightTypeOption.selectByVisibleText("No Preference");
 
 
         //continue button
-        driver.findElement(By.name("findFlights")).submit();
+        driver.findElement(By.xpath("//input[@name='findFlights']")).click();
 
         //Depart to
-        driver.findElements(By.name("outFlight")).get(2).click();
+        driver.findElement(By.xpath("//input[@value='Blue Skies Airlines$361$271$7:10']")).click();
+
         //Arrive to
-        driver.findElements(By.name("outFlight")).get(2).click();
+        driver.findElement(By.xpath("//input[@value='Blue Skies Airlines$630$270$12:23']")).click();
 
         //continue button clicked
-        driver.findElement(By.name("reserveFlights")).submit();
+        driver.findElement(By.xpath("//input[@name='reserveFlights']")).click();
 
         String actual_url = driver.getCurrentUrl();
         String expected_url = "http://newtours.demoaut.com/mercuryreservation.php?osCsid=b7dd10f493813134cb2c66e437e63b0d";
@@ -274,31 +302,35 @@ public class Mercury_Tours {
     }
 
     //******Empty passengers field
-    @Test(description = "empty passengers field")
+    @Test(description = "empty passengers field", dependsOnMethods = {"register","login"}, priority = 3)
     public void book_flight()   {
-        driver.findElement(By.xpath("//input[@value='roundtrip']")).click();
+
+        driver.get("http://newtours.demoaut.com/mercuryreservation.php?osCsid=8af1e1a6f13b5cf11b3a39847c952e8e");
+        driver.findElements(By.xpath("//input[@name='tripType']")).get(0).click();
+
         //Passengers
-        WebElement passengers = driver.findElement(By.name("passCount"));
-        Select selectpassenger = new Select(passengers);
-        selectpassenger.selectByVisibleText("1");
+        WebElement numPass = driver.findElement(By.xpath("//select[@name='passCount']"));
+        Select numPassOption = new Select(numPass);
+        numPassOption.selectByValue("2");
 
         //Departing
-
-        WebElement depart = driver.findElement(By.name("fromPort"));
-        Select departdrop = new Select(depart);
-
-        departdrop.selectByVisibleText("Acapulco");
+        WebElement departFrom = driver.findElement(By.xpath("//select[@name='fromPort']"));
+        Select departFromOption = new Select(departFrom);
+        departFromOption.selectByValue("New York");
 
         //departing(date)
-        WebElement month = driver.findElement(By.name("fromMonth"));
-        WebElement day = driver.findElement(By.name("fromDay"));
-        new Select(month).selectByVisibleText("May");
-        new Select(day).selectByVisibleText("2");
+        WebElement departMonth = driver.findElement(By.xpath("//select[@name='fromMonth']"));
+        Select departMonthOption = new Select(departMonth);
+        departMonthOption.selectByValue("2");
 
+        WebElement departDay = driver.findElement(By.xpath("//select[@name='fromDay']"));
+        Select departDayOption = new Select(departDay);
+        departDayOption.selectByValue("22");
 
         // ARRIVING IN
-        WebElement arrive = driver.findElement(By.name("toPort"));
-        new Select(arrive).selectByVisibleText("London");
+        WebElement arrivTo = driver.findElement(By.xpath("//select[@name='toPort']"));
+        Select arrivToOption= new Select(arrivTo);
+        arrivToOption.selectByValue("London");
 
         //Returning date
         WebElement month1 = driver.findElement(By.name("toMonth"));
@@ -310,20 +342,21 @@ public class Mercury_Tours {
         driver.findElements(By.xpath("//input[@name='servClass']")).get(2).click();
 
         //Airline
-        WebElement prefrence = driver.findElement(By.name("airline"));
-        new Select(prefrence).selectByVisibleText("Unified Airlines");
-
+        WebElement flightType = driver.findElement(By.xpath("//select[@name='airline']"));
+        Select flightTypeOption = new Select(flightType);
+        flightTypeOption.selectByVisibleText("No Preference");
 
         //continue button
-        driver.findElement(By.name("findFlights")).submit();
+        driver.findElement(By.xpath("//input[@name='findFlights']")).click();
 
         //Depart to
-        driver.findElements(By.name("outFlight")).get(2).click();
+        driver.findElement(By.xpath("//input[@value='Blue Skies Airlines$361$271$7:10']")).click();
+
         //Arrive to
-        driver.findElements(By.name("outFlight")).get(2).click();
+        driver.findElement(By.xpath("//input[@value='Blue Skies Airlines$630$270$12:23']")).click();
 
         //continue button clicked
-        driver.findElement(By.name("reserveFlights")).submit();
+        driver.findElement(By.xpath("//input[@name='reserveFlights']")).click();
 
 
 
