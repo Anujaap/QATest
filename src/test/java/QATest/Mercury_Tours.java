@@ -152,7 +152,7 @@ public class Mercury_Tours {
     @Test(description = "departure and arival city negative test case", dependsOnMethods = {"register","login"}, priority = 3)
     public void city() {
 
-        driver.get("http://newtours.demoaut.com/mercuryreservation.php?osCsid=8af1e1a6f13b5cf11b3a39847c952e8e");
+        login();
         driver.findElements(By.name("tripType")).get(0).click();
         //Passengers
         WebElement numPass = driver.findElement(By.xpath("//select[@name='passCount']"));
@@ -236,7 +236,7 @@ public class Mercury_Tours {
     @Test(description = "Departure date should be less than arrival date ", dependsOnMethods = {"register","login"}, priority = 4)
     public void date(){
 
-        driver.get("http://newtours.demoaut.com/mercuryreservation.php?osCsid=8af1e1a6f13b5cf11b3a39847c952e8e");
+        login();
         driver.findElements(By.xpath("//input[@name='tripType']")).get(0).click();
 
         //Passengers
@@ -305,7 +305,7 @@ public class Mercury_Tours {
     @Test(description = "empty passengers field", dependsOnMethods = {"register","login"}, priority = 3)
     public void book_flight()   {
 
-        driver.get("http://newtours.demoaut.com/mercuryreservation.php?osCsid=8af1e1a6f13b5cf11b3a39847c952e8e");
+        login();
         driver.findElements(By.xpath("//input[@name='tripType']")).get(0).click();
 
         //Passengers
